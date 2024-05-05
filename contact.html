@@ -142,7 +142,7 @@
 
         // Function to fetch contacts and populate the table
         function fetchContacts() {
-            fetch('/.netlify/functions/allContacts')
+            fetch('/.netlify/functions/contact_read')
                 .then(response => response.json())
                 .then(contacts => {
                     const contactsTableBody = document.getElementById('contactsTableBody');

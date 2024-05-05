@@ -1,0 +1,8 @@
+{
+    "name": "crm",
+    "version": "1.0.0",
+    "dependencies": {
+        "mysql2": "^2.2.5",
+        "netlify-identity-widget": "^1.9.2"
+    }
+}

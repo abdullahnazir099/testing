@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Tool - Categories</title>
+    <link href="style.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">CRM Tool</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categories.html">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contacts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="notes.html">Notes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-primary mr-2" onclick="window.netlifyIdentity && window.netlifyIdentity.open('login')">Log In</button>
+                        <button class="btn btn-danger" onclick="window.netlifyIdentity && window.netlifyIdentity.logout()">Log Out</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2>Categories</h2>
+        <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addCategoryForm">
+                            <div class="form-group">
+                                <label for="categoryName">Category Name</label>
+                                <input type="text" class="form-control" id="categoryName" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Edit Category Modal -->
+        <div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editCategoryForm">
+                            <div class="form-group">
+                                <label for="editCategoryName">Category Name</label>
+                                <input type="text" class="form-control" id="editCategoryName" required>
+                            </div>
+                            <input type="hidden" id="editCategoryId">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.on("init", () => {
+            const user = netlifyIdentity.currentUser();
+            console.log('Netlify Identity initial user state:', user);
+      
+            if (!user) {
+              console.log('No user found, opening login modal');
+              netlifyIdentity.open("login"); // Automatically opens login modal
+            } else {
+              console.log('User found:', user);
+              fetchCategories();
+            }
+      
+            netlifyIdentity.on("login", (user) => {
+              console.log('User logged in', user);
+              netlifyIdentity.close();
+              fetchCategories();
+            });
+      
+            netlifyIdentity.on("logout", () => {
+              console.log('User logged out');
+              document.location.href = "/categories.html";
+            });
+          });
+        } else {
+          console.error('Netlify Identity script not found. Ensure it is loaded before this script.');
+        }
+      
+        function fetchCategories() {
+          const user = netlifyIdentity.currentUser();
+      
+          if (!user) {
+            console.log('User not logged in');
+            return;
+          }
+      
+          user.jwt().then((token) => {
+            fetch('/.netlify/functions/getCategories', {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            })
+            .then(response => response.json())
+            .then(categories => {
+              // Handle categories data here
+              console.log('Fetched categories:', categories);
+              // Example: Render categories to UI
+            })
+            .catch(error => console.error('Error fetching categories:', error));
+          });
+        }
+      </script>
+      
+</body>
+</html>

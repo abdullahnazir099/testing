@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Tool - Contact View</title>
+    <link href="style.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include Netlify Identity Widget -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">CRM Tool</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categories.html">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contacts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="notes.html">Notes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2>Contact Details</h2>
+        <div id="contactDetails"></div> <!-- Display contact details here -->
+        <h3>Notes</h3>
+        <ul id="contactNotes"></ul> <!-- Display notes here -->
+    </div>
+
+    <!-- JavaScript Section -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const contactId = urlParams.get('id');
+            fetchContact(contactId);
+        });
+
+        function fetchContact(contactId) {
+            fetch(`/.netlify/functions/single_contact_read?id=${contactId}`)
+                .then(response => response.json())
+                .then(contact => {
+                    const contactDetails = document.getElementById('contactDetails');
+                    contactDetails.innerHTML = `
+                        <p><strong>Name:</strong> ${contact.first_name} ${contact.last_name}</p>
+                        <p><strong>Email:</strong> ${contact.email}</p>
+                        <p><strong>Phone:</strong> ${contact.phone}</p>
+                        <p><strong>Category:</strong> ${contact.category}</p>
+                    `;
+                })
+                .catch(error => console.error('Error fetching contact:', error));
+        }
+
+        // Netlify Identity User Authentication Script
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", () => {
+                const user = netlifyIdentity.currentUser();
+                console.log('Netlify Identity initial user state:', user);
+                
+                if (!user) {
+                    console.log('No user found, opening login modal');
+                    netlifyIdentity.open("login"); // Automatically opens login modal
+                } else {
+
+                    console.log('User found:', user);
+
+                }
+
+                netlifyIdentity.on("login", (user) => {
+                    console.log('User logged in', user);
+                    netlifyIdentity.close();
+                });
+
+                netlifyIdentity.on("logout", () => {
+                    console.log('User logged out');
+                    document.location.href = "/books.html"; // Redirect to desired page after logout
+                });
+            });
+        } else {
+            console.error('Netlify Identity script not found. Ensure it is loaded before this script.');
+        }
+    </script>
+</body>
+</html>
+

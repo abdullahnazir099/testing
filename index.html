@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Tool - Home</title>
+    <link href="style.css" rel="stylesheet">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">CRM Tool</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categories.html">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contacts</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="notes.html">Notes</a>
+                  </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="container">
+                    <h1>Welcome to Your Ultimate CRM Solution!</h1>
+                    <p>Are you tired of juggling endless spreadsheets, losing track of important customer interactions, and missing out on potential leads? Say hello to streamlined efficiency with our cutting-edge CRM tool!</p>
+                    <!-- Button for manual login -->
+                    <button onclick="window.netlifyIdentity && window.netlifyIdentity.open('login')">Log In</button>
+                    <!-- Button for manual logout -->
+                    <button onclick="window.netlifyIdentity && window.netlifyIdentity.logout()">Log Out</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.on("init", () => {
+            const user = netlifyIdentity.currentUser();
+            console.log('Netlify Identity initial user state:', user);
+            
+            if (!user && window.location.pathname !== "/index.html") {
+              console.log('No user found, opening login modal');
+              netlifyIdentity.open("login"); // Automatically opens login modal
+            } else {
+              // User is logged in; perform actions as needed
+              console.log('User found:', user);
+              // Fetch relevant data if needed
+            }
+      
+            netlifyIdentity.on("login", (user) => {
+              console.log('User logged in', user);
+              netlifyIdentity.close();
+              // Perform actions after login, like fetching data
+            });
+      
+            netlifyIdentity.on("logout", () => {
+              console.log('User logged out');
+              document.location.href = "/index.html"; // Redirect to home page after logout
+            });
+          });
+        } else {
+          console.error('Netlify Identity script not found. Ensure it is loaded before this script.');
+        }
+      </script>
+    
+</body>
+</html>

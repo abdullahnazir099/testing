@@ -3,13 +3,7 @@ const mysql = require('mysql2/promise');
 exports.handler = async (event, context) => {
   try {
     // Check for the presence of an authenticated user in the context object
-    if (!context.clientContext || !context.clientContext.user) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: 'You must be logged in to delete notes.' }),
-      };
-    }
-
+  
     // Parse the query parameters to extract the ID of the note to delete
     const { id } = event.queryStringParameters;
 

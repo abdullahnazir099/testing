@@ -3,12 +3,7 @@ const mysql = require('mysql2/promise');
 exports.handler = async (event, context) => {
   try {
     // Check for the presence of an authenticated user in the context object
-    if (!context.clientContext || !context.clientContext.user) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: 'You must be logged in to read contacts.' }),
-      };
-    }
+
 
     // Parse the request body to extract the contact ID
     const { id } = event.queryStringParameters;

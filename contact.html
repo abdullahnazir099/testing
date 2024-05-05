@@ -177,8 +177,8 @@
             fetch('/.netlify/functions/contact_create', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     first_name: contactName.split(' ')[0], // Assuming first and last name are entered together
